@@ -194,35 +194,36 @@ const stats = computed(() => [
       <!-- Main Content -->
       <main class="flex-1 p-6">
         <!-- Stats Cards -->
-        <div
-          v-if="stats.value != 0"
-          class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-8"
-        >
+        <client-only>
           <div
-            v-for="stat in stats"
-            :key="stat.title"
-            class="bg-white shadow-sm p-6 border border-gray-200 rounded-lg"
+            class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-8"
           >
-            <div class="flex justify-between items-center">
-              <div>
-                <p class="font-medium text-gray-600 text-sm">
-                  {{ stat.title }}
-                </p>
-                <p class="mt-2 font-bold text-gray-900 text-3xl">
-                  {{ stat.value }}
-                </p>
-              </div>
-              <div
-                :class="[
-                  stat.color,
-                  'w-12 h-12 rounded-lg flex items-center justify-center text-white text-xl',
-                ]"
-              >
-                {{ stat.icon }}
+            <div
+              v-for="stat in stats"
+              :key="stat.title"
+              class="bg-white shadow-sm p-6 border border-gray-200 rounded-lg"
+            >
+              <div class="flex justify-between items-center">
+                <div>
+                  <p class="font-medium text-gray-600 text-sm">
+                    {{ stat.title }}
+                  </p>
+                  <p class="mt-2 font-bold text-gray-900 text-3xl">
+                    {{ stat.value }}
+                  </p>
+                </div>
+                <div
+                  :class="[
+                    stat.color,
+                    'w-12 h-12 rounded-lg flex items-center justify-center text-white text-xl',
+                  ]"
+                >
+                  {{ stat.icon }}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </client-only>
 
         <!-- Users Table -->
         <div class="bg-white shadow-sm border border-gray-200 rounded-lg">
@@ -254,123 +255,127 @@ const stats = computed(() => [
           </div>
 
           <div class="overflow-x-auto">
-            <table class="w-full">
-              <thead class="bg-gray-50">
-                <tr>
-                  <th
-                    class="px-6 py-3 font-medium text-gray-500 text-xs text-left uppercase tracking-wider"
-                  >
-                    User
-                  </th>
-                  <th
-                    class="px-6 py-3 font-medium text-gray-500 text-xs text-left uppercase tracking-wider"
-                  >
-                    Email
-                  </th>
-                  <th
-                    class="px-6 py-3 font-medium text-gray-500 text-xs text-left uppercase tracking-wider"
-                  >
-                    Role
-                  </th>
-                  <th
-                    class="px-6 py-3 font-medium text-gray-500 text-xs text-left uppercase tracking-wider"
-                  >
-                    Status
-                  </th>
-                  <th
-                    class="px-6 py-3 font-medium text-gray-500 text-xs text-right uppercase tracking-wider"
-                  >
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody
-                v-if="userList.length"
-                class="bg-white divide-y divide-gray-200"
-              >
-                <tr
-                  v-for="user in userList"
-                  :key="user.id"
-                  class="hover:bg-gray-50"
-                >
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex items-center">
-                      <div
-                        class="flex justify-center items-center bg-gray-200 mr-4 rounded-full w-10 h-10"
-                      >
-                        <span class="font-medium text-gray-700 text-sm">
-                          {{ (user.name || "U").charAt(0).toUpperCase() }}
-                        </span>
-                      </div>
-                      <div>
-                        <div class="font-medium text-gray-900 text-sm">
-                          {{ user.name || "Unknown" }}
-                        </div>
-                        <div class="text-gray-500 text-sm">
-                          ID: {{ user.id }}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-gray-900 text-sm">{{ user.email }}</div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <span
-                      class="px-2 py-1 rounded-md font-medium text-xs"
-                      :class="
-                        user.role === 'admin'
-                          ? 'bg-red-100 text-red-800'
-                          : 'bg-gray-100 text-gray-800'
-                      "
+            <client-only>
+              <table class="w-full">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th
+                      class="px-6 py-3 font-medium text-gray-500 text-xs text-left uppercase tracking-wider"
                     >
-                      {{ user.role || "User" }}
-                    </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <span class="flex items-center text-green-600 text-sm">
-                      <div class="bg-green-400 mr-2 rounded-full w-2 h-2" />
-                      Active
-                    </span>
-                  </td>
-                  <td
-                    class="px-6 py-4 font-medium text-sm text-right whitespace-nowrap"
+                      User
+                    </th>
+                    <th
+                      class="px-6 py-3 font-medium text-gray-500 text-xs text-left uppercase tracking-wider"
+                    >
+                      Email
+                    </th>
+                    <th
+                      class="px-6 py-3 font-medium text-gray-500 text-xs text-left uppercase tracking-wider"
+                    >
+                      Role
+                    </th>
+                    <th
+                      class="px-6 py-3 font-medium text-gray-500 text-xs text-left uppercase tracking-wider"
+                    >
+                      Status
+                    </th>
+                    <th
+                      class="px-6 py-3 font-medium text-gray-500 text-xs text-right uppercase tracking-wider"
+                    >
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody
+                  v-if="userList.length"
+                  class="bg-white divide-y divide-gray-200"
+                >
+                  <tr
+                    v-for="user in userList"
+                    :key="user.id"
+                    class="hover:bg-gray-50"
                   >
-                    <div class="flex justify-end items-center space-x-2">
-                      <button class="text-blue-600 hover:text-blue-900">
-                        Edit
-                      </button>
-                      <button class="text-red-600 hover:text-red-900">
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-              <tbody v-else class="bg-white">
-                <tr>
-                  <td colspan="5" class="px-6 py-12 text-center">
-                    <div class="text-gray-500">
-                      <div class="mb-2 text-4xl">👥</div>
-                      <div class="mb-1 font-medium text-lg">No users found</div>
-                      <div class="text-sm">
-                        Get started by adding your first user.
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="flex items-center">
+                        <div
+                          class="flex justify-center items-center bg-gray-200 mr-4 rounded-full w-10 h-10"
+                        >
+                          <span class="font-medium text-gray-700 text-sm">
+                            {{ (user.name || "U").charAt(0).toUpperCase() }}
+                          </span>
+                        </div>
+                        <div>
+                          <div class="font-medium text-gray-900 text-sm">
+                            {{ user.name || "Unknown" }}
+                          </div>
+                          <div class="text-gray-500 text-sm">
+                            ID: {{ user.id }}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-gray-900 text-sm">{{ user.email }}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span
+                        class="px-2 py-1 rounded-md font-medium text-xs"
+                        :class="
+                          user.role === 'admin'
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-gray-100 text-gray-800'
+                        "
+                      >
+                        {{ user.role || "User" }}
+                      </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span class="flex items-center text-green-600 text-sm">
+                        <div class="bg-green-400 mr-2 rounded-full w-2 h-2" />
+                        Active
+                      </span>
+                    </td>
+                    <td
+                      class="px-6 py-4 font-medium text-sm text-right whitespace-nowrap"
+                    >
+                      <div class="flex justify-end items-center space-x-2">
+                        <button class="text-blue-600 hover:text-blue-900">
+                          Edit
+                        </button>
+                        <button class="text-red-600 hover:text-red-900">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody v-else class="bg-white">
+                  <tr>
+                    <td colspan="5" class="px-6 py-12 text-center">
+                      <div class="text-gray-500">
+                        <div class="mb-2 text-4xl">👥</div>
+                        <div class="mb-1 font-medium text-lg">
+                          No users found
+                        </div>
+                        <div class="text-sm">
+                          Get started by adding your first user.
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </client-only>
           </div>
 
           <!-- Table Footer with Pagination -->
           <div class="bg-gray-50 px-6 py-3 border-gray-200 border-t">
             <div class="flex justify-between items-center">
-              <div class="text-gray-700 text-sm">
+              <!-- <div class="text-gray-700 text-sm">
                 Showing <span class="font-medium">1</span> to
                 <span class="font-medium">{{ userList.length }}</span> of
                 <span class="font-medium">{{ userList.length }}</span> results
-              </div>
+              </div> -->
               <div class="flex items-center space-x-2">
                 <button
                   class="bg-white hover:bg-gray-50 disabled:opacity-50 px-3 py-1 border border-gray-300 rounded-md font-medium text-gray-500 text-sm"
