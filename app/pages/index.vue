@@ -2,12 +2,39 @@
 import { ref } from "vue";
 import { authClient } from "~/lib/client";
 
+type Session = {
+  user: {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    email: string;
+    emailVerified: boolean;
+    name: string;
+    image?: string | null | undefined;
+    banned: boolean | null | undefined;
+    role?: string | null | undefined;
+    banReason?: string | null | undefined;
+    banExpires?: Date | null | undefined;
+  };
+  session: {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    userId: string;
+    expiresAt: Date;
+    token: string;
+    ipAddress?: string | null | undefined;
+    userAgent?: string | null | undefined;
+    impersonatedBy?: string | null | undefined;
+  };
+};
+
 // reactive form fields
 const email = ref("");
 const password = ref("");
 
 // session (fetched from your Hono backend route `/api/session`)
-const { data: session, refresh } = await useFetch("/api/session", {
+const { data: session, refresh } = await useFetch<Session>("/api/session", {
   credentials: "include", // important for cookies
 });
 console.log("session", session);
@@ -54,18 +81,20 @@ async function handleLogout() {
     </div>
 
     <form v-else class="space-y-4" @submit.prevent="handleLogin">
+      <!-- prettier-ignore -->
       <input
         v-model="email"
         type="email"
         placeholder="Email"
         class="px-3 py-2 border rounded w-full"
-      />
+      >
+      <!-- prettier-ignore -->
       <input
         v-model="password"
         type="password"
         placeholder="Password"
         class="px-3 py-2 border rounded w-full"
-      />
+      >
       <button
         type="submit"
         class="bg-blue-600 px-4 py-2 rounded w-full text-white"
