@@ -376,11 +376,12 @@ const stats = computed(() => [
           <!-- Table Footer with Pagination -->
           <div class="bg-gray-50 px-6 py-3 border-gray-200 border-t">
             <div class="flex justify-between items-center">
-              <!-- <div class="text-gray-700 text-sm">
-                Showing <span class="font-medium">1</span> to
-                <span class="font-medium">{{ userList.length }}</span> of
-                <span class="font-medium">{{ userList.length }}</span> results
-              </div> -->
+              <client-only>
+                <div class="text-gray-700 text-sm">
+                  Showing <span class="font-medium">1</span> of
+                  <span class="font-medium">{{ userList.length }}</span> results
+                </div>
+              </client-only>
               <div class="flex items-center space-x-2">
                 <button
                   class="bg-white hover:bg-gray-50 disabled:opacity-50 px-3 py-1 border border-gray-300 rounded-md font-medium text-gray-500 text-sm"
