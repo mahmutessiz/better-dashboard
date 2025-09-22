@@ -25,6 +25,21 @@ const { data: usersall } = await authClient.admin.listUsers({
   //     filterOperator: "eq",
   //   },
 });
+
+const handleSignout = async () => {
+  try {
+    await signOut({
+      fetchOptions: {
+        onSuccess: async () => {
+          await navigateTo("/");
+        },
+      },
+    });
+  } catch (err) {
+    console.error("Logout failed:", err);
+  }
+};
+
 console.log(usersall?.users);
 
 const userList = computed(() => usersall?.users ?? []);
@@ -120,15 +135,17 @@ const stats = computed(() => [
             <div class="flex items-center space-x-2">
               <button
                 v-if="!isAuthenticated"
-                @click="signIn"
+                type="button"
                 class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md font-medium text-white text-sm"
+                @click="signIn"
               >
                 Sign In
               </button>
               <button
                 v-else
-                @click="signOut"
-                class="bg-white hover:bg-gray-50 px-4 py-2 border border-gray-300 rounded-md font-medium text-gray-700 text-sm"
+                type="button"
+                class="bg-white hover:bg-gray-50 px-4 py-2 border border-gray-300 rounded-md font-medium text-gray-700 text-sm cursor-pointer"
+                @click="handleSignout"
               >
                 Sign Out
               </button>
@@ -167,7 +184,7 @@ const stats = computed(() => [
           <div class="bg-gray-50 p-3 rounded-lg">
             <div class="text-gray-500 text-xs">System Status</div>
             <div class="flex items-center space-x-2 mt-1">
-              <div class="bg-green-400 rounded-full w-2 h-2"></div>
+              <div class="bg-green-400 rounded-full w-2 h-2" />
               <span class="text-gray-700 text-sm">All Systems Operational</span>
             </div>
           </div>
@@ -177,7 +194,10 @@ const stats = computed(() => [
       <!-- Main Content -->
       <main class="flex-1 p-6">
         <!-- Stats Cards -->
-        <div class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-8">
+        <div
+          v-if="stats.value != 0"
+          class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-8"
+        >
           <div
             v-for="stat in stats"
             :key="stat.title"
@@ -309,7 +329,7 @@ const stats = computed(() => [
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
                     <span class="flex items-center text-green-600 text-sm">
-                      <div class="bg-green-400 mr-2 rounded-full w-2 h-2"></div>
+                      <div class="bg-green-400 mr-2 rounded-full w-2 h-2" />
                       Active
                     </span>
                   </td>
