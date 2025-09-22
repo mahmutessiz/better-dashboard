@@ -1,29 +1,44 @@
 <script setup lang="ts">
 import { authClient } from "~/lib/client";
 
-const { signIn, signOut } = authClient;
-const { data: session } = await useFetch("/api/session", {
+type Session = {
+  user: {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    email: string;
+    emailVerified: boolean;
+    name: string;
+    image?: string | null | undefined;
+    banned: boolean | null | undefined;
+    role?: string | null | undefined;
+    banReason?: string | null | undefined;
+    banExpires?: Date | null | undefined;
+  };
+  session: {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    userId: string;
+    expiresAt: Date;
+    token: string;
+    ipAddress?: string | null | undefined;
+    userAgent?: string | null | undefined;
+    impersonatedBy?: string | null | undefined;
+  };
+};
+
+const { signOut } = authClient;
+const { data: session } = await useFetch<Session>("/api/session", {
   credentials: "include",
 });
 
-// get all users
-// const { data: users, error } = await useFetch("/api/users", {
-//   credentials: "include",
-// });
-
-const { data: usersall } = await authClient.admin.listUsers({
-  //   query: {
-  //     searchValue: "some name",
-  //     searchField: "name",
-  //     searchOperator: "contains",
-  //     limit: 100,
-  //     offset: 100,
-  //     sortBy: "name",
-  //     sortDirection: "desc",
-  //     filterField: "email",
-  //     filterValue: "hello@example.com",
-  //     filterOperator: "eq",
-  //   },
+const { data: getUsers } = await authClient.admin.listUsers({
+  query: {
+    limit: 100,
+    offset: 0,
+    sortBy: "createdAt",
+  },
 });
 
 const handleSignout = async () => {
@@ -40,9 +55,7 @@ const handleSignout = async () => {
   }
 };
 
-console.log(usersall?.users);
-
-const userList = computed(() => usersall?.users ?? []);
+const userList = computed(() => getUsers?.users ?? []);
 
 // Current user info from session
 const currentUser = computed(() => session.value?.user);
@@ -134,15 +147,6 @@ const stats = computed(() => [
 
             <div class="flex items-center space-x-2">
               <button
-                v-if="!isAuthenticated"
-                type="button"
-                class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md font-medium text-white text-sm"
-                @click="signIn"
-              >
-                Sign In
-              </button>
-              <button
-                v-else
                 type="button"
                 class="bg-white hover:bg-gray-50 px-4 py-2 border border-gray-300 rounded-md font-medium text-gray-700 text-sm cursor-pointer"
                 @click="handleSignout"
@@ -234,11 +238,12 @@ const stats = computed(() => [
               </h2>
               <div class="flex items-center space-x-3">
                 <div class="relative">
+                  <!-- prettier-ignore -->
                   <input
                     type="text"
                     placeholder="Search users..."
                     class="py-2 pr-4 pl-10 border border-gray-300 focus:border-blue-500 rounded-md focus:ring-2 focus:ring-blue-500 text-sm"
-                  />
+                  >
                   <div
                     class="left-0 absolute inset-y-0 flex items-center pl-3 pointer-events-none"
                   >
