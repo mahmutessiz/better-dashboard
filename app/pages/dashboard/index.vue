@@ -7,11 +7,27 @@ const { data: session } = await useFetch("/api/session", {
 });
 
 // get all users
-const { data: users } = await useFetch("/api/users", {
-  credentials: "include",
-});
+// const { data: users, error } = await useFetch("/api/users", {
+//   credentials: "include",
+// });
 
-const userList = computed(() => users.value?.users ?? []);
+const { data: usersall } = await authClient.admin.listUsers({
+  //   query: {
+  //     searchValue: "some name",
+  //     searchField: "name",
+  //     searchOperator: "contains",
+  //     limit: 100,
+  //     offset: 100,
+  //     sortBy: "name",
+  //     sortDirection: "desc",
+  //     filterField: "email",
+  //     filterValue: "hello@example.com",
+  //     filterOperator: "eq",
+  //   },
+});
+console.log(usersall?.users);
+
+const userList = computed(() => usersall?.users ?? []);
 
 // Current user info from session
 const currentUser = computed(() => session.value?.user);
