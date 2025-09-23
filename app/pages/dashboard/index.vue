@@ -1,32 +1,6 @@
 <script setup lang="ts">
 import { authClient } from "~/lib/client";
-
-type Session = {
-  user: {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
-    email: string;
-    emailVerified: boolean;
-    name: string;
-    image?: string | null | undefined;
-    banned: boolean | null | undefined;
-    role?: string | null | undefined;
-    banReason?: string | null | undefined;
-    banExpires?: Date | null | undefined;
-  };
-  session: {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
-    userId: string;
-    expiresAt: Date;
-    token: string;
-    ipAddress?: string | null | undefined;
-    userAgent?: string | null | undefined;
-    impersonatedBy?: string | null | undefined;
-  };
-};
+import type { Session } from "~/types/general";
 
 const { signOut } = authClient;
 const { data: session } = await useFetch<Session>("/api/session", {
@@ -55,13 +29,35 @@ const handleSignout = async () => {
   }
 };
 
+const banUser = async (userId: string) => {
+  try {
+    await authClient.admin.banUser({
+      userId: userId,
+      banReason: "Spamming",
+      banExpiresIn: 60 * 60 * 24 * 7,
+    });
+    window.location.reload();
+  } catch (err) {
+    console.error("Ban user failed:", err);
+  }
+};
+
+const unbanUser = async (userId: string) => {
+  try {
+    await authClient.admin.unbanUser({
+      userId: userId,
+    });
+    window.location.reload();
+  } catch (err) {
+    console.error("Unban user failed:", err);
+  }
+};
+
 const userList = computed(() => getUsers?.users ?? []);
 
-// Current user info from session
 const currentUser = computed(() => session.value?.user);
 const isAuthenticated = computed(() => !!session.value?.user);
 
-// Sidebar navigation items
 const navigationItems = [
   { name: "Dashboard", icon: "📊", active: true },
   { name: "Users", icon: "👥", active: false },
@@ -69,7 +65,8 @@ const navigationItems = [
   { name: "Reports", icon: "📈", active: false },
 ];
 
-// Stats for dashboard cards
+console.log("Users:", userList.value);
+
 const stats = computed(() => [
   {
     title: "Total Users",
@@ -335,17 +332,34 @@ const stats = computed(() => [
                       </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <span class="flex items-center text-green-600 text-sm">
-                        <div class="bg-green-400 mr-2 rounded-full w-2 h-2" />
-                        Active
+                      <span
+                        class="flex items-center text-green-600 text-sm"
+                        :class="{ 'text-red-700': user.banned }"
+                      >
+                        <div
+                          class="bg-green-400 mr-2 rounded-full w-2 h-2"
+                          :class="{ 'bg-red-700': user.banned }"
+                        />
+                        {{ user.banned ? "Banned" : "Active" }}
                       </span>
                     </td>
                     <td
                       class="px-6 py-4 font-medium text-sm text-right whitespace-nowrap"
                     >
                       <div class="flex justify-end items-center space-x-2">
-                        <button class="text-blue-600 hover:text-blue-900">
-                          Edit
+                        <button
+                          class="bg-gray-300 hover:bg-gray-400 px-3 py-1 rounded-md text-black transition-all duration-200 cursor-pointer"
+                          @click="
+                            async () => {
+                              if (user.banned) {
+                                await unbanUser(user.id);
+                              } else {
+                                await banUser(user.id);
+                              }
+                            }
+                          "
+                        >
+                          {{ user.banned ? "Unban" : "Ban" }}
                         </button>
                         <button class="text-red-600 hover:text-red-900">
                           Delete

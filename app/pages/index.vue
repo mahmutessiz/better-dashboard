@@ -1,47 +1,17 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { authClient } from "~/lib/client";
+import type { Session } from "~/types/general";
 
-type Session = {
-  user: {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
-    email: string;
-    emailVerified: boolean;
-    name: string;
-    image?: string | null | undefined;
-    banned: boolean | null | undefined;
-    role?: string | null | undefined;
-    banReason?: string | null | undefined;
-    banExpires?: Date | null | undefined;
-  };
-  session: {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
-    userId: string;
-    expiresAt: Date;
-    token: string;
-    ipAddress?: string | null | undefined;
-    userAgent?: string | null | undefined;
-    impersonatedBy?: string | null | undefined;
-  };
-};
-
-// reactive form fields
 const email = ref("");
 const password = ref("");
 
-// session (fetched from your Hono backend route `/api/session`)
 const { data: session, refresh } = await useFetch<Session>("/api/session", {
-  credentials: "include", // important for cookies
+  credentials: "include",
 });
-console.log("session", session);
 
 const { signIn, signOut } = authClient;
 
-// handle login
 async function handleLogin() {
   try {
     await signIn.email({
@@ -55,7 +25,6 @@ async function handleLogin() {
   }
 }
 
-// handle logout
 async function handleLogout() {
   try {
     await signOut();
