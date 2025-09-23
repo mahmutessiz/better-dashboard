@@ -6,6 +6,7 @@ defineProps<{
   userList: UserWithRole[];
   banUser: (id: string) => void;
   unbanUser: (id: string) => void;
+  deleteUser: (id: string) => void;
 }>();
 </script>
 
@@ -75,6 +76,7 @@ defineProps<{
             :user="user"
             :ban-user="banUser"
             :unban-user="unbanUser"
+            :delete-user="deleteUser"
           />
         </tbody>
         <tbody v-else class="bg-white">

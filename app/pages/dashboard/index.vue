@@ -36,6 +36,10 @@ const unbanUser = async (userId: string) => {
   await authClient.admin.unbanUser({ userId });
   window.location.reload();
 };
+const deleteUser = async (userId: string) => {
+  await authClient.admin.removeUser({ userId });
+  window.location.reload();
+};
 
 const userList = computed(() => getUsers?.users ?? []);
 const currentUser = computed(() => session.value?.user);
@@ -90,6 +94,7 @@ const stats = computed(() => [
           :user-list="userList"
           :ban-user="banUser"
           :unban-user="unbanUser"
+          :delete-user="deleteUser"
         />
       </main>
     </div>
