@@ -15,9 +15,14 @@ const { data: getUsers } = await authClient.admin.listUsers({
 });
 
 const handleSignout = async () => {
-  await signOut({ fetchOptions: { onSuccess: async () => navigateTo("/") } });
+  await signOut({
+    fetchOptions: {
+      onSuccess: async () => {
+        await navigateTo("/");
+      },
+    },
+  });
 };
-
 const banUser = async (userId: string) => {
   await authClient.admin.banUser({
     userId,
