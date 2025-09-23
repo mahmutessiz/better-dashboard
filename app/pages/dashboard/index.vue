@@ -179,17 +179,6 @@ const stats = computed(() => [
             </li>
           </ul>
         </nav>
-
-        <!-- Sidebar Footer -->
-        <div class="right-4 bottom-4 left-4 absolute">
-          <div class="bg-gray-50 p-3 rounded-lg">
-            <div class="text-gray-500 text-xs">System Status</div>
-            <div class="flex items-center space-x-2 mt-1">
-              <div class="bg-green-400 rounded-full w-2 h-2" />
-              <span class="text-gray-700 text-sm">All Systems Operational</span>
-            </div>
-          </div>
-        </div>
       </aside>
 
       <!-- Main Content -->
