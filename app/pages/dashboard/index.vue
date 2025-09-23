@@ -9,6 +9,7 @@ import type { Session } from "~/types/general";
 const { signOut } = authClient;
 const { data: session } = await useFetch<Session>("/api/session", {
   credentials: "include",
+  server: false,
 });
 const { data: getUsers } = await authClient.admin.listUsers({
   query: { limit: 100, offset: 0, sortBy: "createdAt" },
@@ -89,13 +90,54 @@ const stats = computed(() => [
     <div class="flex">
       <sidebar-component :navigation-items="navigationItems" />
       <main class="flex-1 p-6">
-        <stat-card-componet :stats="stats" />
-        <users-table-component
-          :user-list="userList"
-          :ban-user="banUser"
-          :unban-user="unbanUser"
-          :delete-user="deleteUser"
-        />
+        <ClientOnly>
+          <stat-card-componet :stats="stats" />
+          <template #fallback>
+            <div class="gap-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+              <div
+                v-for="i in 4"
+                :key="i"
+                class="bg-white shadow rounded-lg overflow-hidden"
+              >
+                <div class="p-5">
+                  <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                      <div class="bg-gray-200 rounded w-8 h-8 animate-pulse" />
+                    </div>
+                    <div class="flex-1 ml-5 w-0">
+                      <div class="bg-gray-200 mb-2 rounded h-4 animate-pulse" />
+                      <div class="bg-gray-200 rounded h-8 animate-pulse" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </ClientOnly>
+        <ClientOnly>
+          <users-table-component
+            :user-list="userList"
+            :ban-user="banUser"
+            :unban-user="unbanUser"
+            :delete-user="deleteUser"
+          />
+          <template #fallback>
+            <div
+              class="bg-white shadow-sm mt-6 border border-gray-200 rounded-lg"
+            >
+              <div class="px-6 py-4 border-gray-200 border-b">
+                <div class="bg-gray-200 rounded w-48 h-6 animate-pulse" />
+              </div>
+              <div class="p-6">
+                <div class="space-y-4 animate-pulse">
+                  <div class="bg-gray-200 rounded w-full h-4" />
+                  <div class="bg-gray-200 rounded w-full h-4" />
+                  <div class="bg-gray-200 rounded w-3/4 h-4" />
+                </div>
+              </div>
+            </div>
+          </template>
+        </ClientOnly>
       </main>
     </div>
   </div>
