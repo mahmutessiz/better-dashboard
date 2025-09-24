@@ -15,7 +15,7 @@ defineProps<{
           <span
             class="bg-blue-100 px-3 py-1 rounded-full font-medium text-blue-800 text-xs"
           >
-            v1.0
+            v0.1
           </span>
         </div>
 
