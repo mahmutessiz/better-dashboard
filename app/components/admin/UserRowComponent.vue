@@ -48,7 +48,18 @@ async function handleBanToggle() {
     <td class="px-6 py-4 whitespace-nowrap">
       <div class="text-gray-900 text-sm">{{ props.user.email }}</div>
     </td>
-
+    <!-- Email Verified -->
+    <td class="px-6 py-4 whitespace-nowrap">
+      <div
+        class="text-sm"
+        :class="{
+          'text-green-600': props.user.emailVerified,
+          'text-red-600': !props.user.emailVerified,
+        }"
+      >
+        {{ props.user.emailVerified }}
+      </div>
+    </td>
     <!-- Role -->
     <td class="px-6 py-4 whitespace-nowrap">
       <span

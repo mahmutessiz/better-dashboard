@@ -55,6 +55,11 @@ defineProps<{
             <th
               class="px-6 py-3 font-medium text-gray-500 text-xs text-left uppercase tracking-wider"
             >
+              Email Verified
+            </th>
+            <th
+              class="px-6 py-3 font-medium text-gray-500 text-xs text-left uppercase tracking-wider"
+            >
               Role
             </th>
             <th
