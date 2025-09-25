@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { authClient } from "~/lib/client";
+// import { authClient } from "~/lib/client";
 import type { Session } from "~/types/general";
 
 const email = ref("");
@@ -10,6 +10,8 @@ const { data: session, refresh } = await useFetch<Session>("/api/session", {
   credentials: "include",
 });
 
+// const { signIn, signOut } = authClient;
+const { authClient } = useAuthClient();
 const { signIn, signOut } = authClient;
 
 async function handleLogin() {
@@ -42,7 +44,7 @@ async function handleLogout() {
     <div v-if="session?.user">
       <p class="mb-4">Welcome, {{ session.user.email }}</p>
       <button
-        class="bg-red-500 px-4 py-2 rounded w-full text-white"
+        class="bg-red-500 px-4 py-2 rounded w-full text-white cursor-pointer"
         @click="handleLogout"
       >
         Logout
@@ -66,7 +68,7 @@ async function handleLogout() {
       >
       <button
         type="submit"
-        class="bg-blue-600 px-4 py-2 rounded w-full text-white"
+        class="bg-blue-600 px-4 py-2 rounded w-full text-white cursor-pointer"
       >
         Login
       </button>

@@ -31,7 +31,7 @@ defineProps<{
           </div>
         </div>
         <button
-          class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md font-medium text-white text-sm"
+          class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md font-medium text-white text-sm cursor-pointer"
         >
           Add User
         </button>

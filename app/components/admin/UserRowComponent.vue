@@ -99,7 +99,10 @@ async function handleBanToggle() {
         </button>
 
         <!-- DELETE -->
-        <button class="text-red-600 hover:text-red-900" @click="handleDelete">
+        <button
+          class="text-red-600 hover:text-red-900 cursor-pointer"
+          @click="handleDelete"
+        >
           Delete
         </button>
       </div>

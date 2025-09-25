@@ -3,10 +3,11 @@ import HeaderComponent from "~/components/admin/HeaderComponent.vue";
 import UsersTableComponent from "~/components/admin/UsersTableComponent.vue";
 import SidebarComponent from "~/components/admin/SidebarComponent.vue";
 import StatCardComponet from "~/components/admin/StatCardComponet.vue";
-import { authClient } from "~/lib/client";
+// import { authClient } from "~/lib/client";
 import type { Session } from "~/types/general";
 
-const { signOut } = authClient;
+// const { signOut } = authClient;
+const { authClient } = useAuthClient();
 const { data: session } = await useFetch<Session>("/api/session", {
   credentials: "include",
   server: false,
@@ -16,7 +17,7 @@ const { data: getUsers } = await authClient.admin.listUsers({
 });
 
 const handleSignout = async () => {
-  await signOut({
+  await authClient.signOut({
     fetchOptions: {
       onSuccess: async () => {
         await navigateTo("/");
