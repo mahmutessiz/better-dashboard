@@ -6,6 +6,8 @@ A Nuxt.js application with better-auth integration and admin dashboard functiona
 
 This dashboard application integrates with better-auth for authentication and provides an admin interface to manage users. The frontend is built with Nuxt.js and Tailwind CSS, while authentication is handled by better-auth.
 
+![alt text](https://github.com/mahmutessiz/better-dashboard/blob/main/public/example.png)
+
 ## Setup
 
 1. Install dependencies:
